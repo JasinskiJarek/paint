@@ -62,13 +62,17 @@ public class Paint extends JFrame {
 	Point2D punkt;
 	boolean zwolniony = false;
 	boolean ciagniety = false;
+	boolean ciagnie = false;
 	ArrayList<Point> punktyKsztaltdowolny = new ArrayList<Point>();
 	ArrayList<Point> punktyKwadrat = new ArrayList<Point>();
+	ArrayList<Shape> kola = new ArrayList<Shape>();
 	ArrayList<Point> punktyWielokat = new ArrayList<Point>();
 	ArrayList<Point> punktyOkrag = new ArrayList<Point>();
 	ArrayList<Shape> ksztaltydowolne = new ArrayList<Shape>();
+	Point koncowy;
 	public GeneralPath path;
 	public GeneralPath wielokat;
+	public Point2D dsa;
 	Area areaToFill = null;
 	Area a2 = null;
 	Area a3 = null;
@@ -100,6 +104,7 @@ public class Paint extends JFrame {
 	boolean klikniety = false;
 	Color kolor = Color.BLACK;
 	private JPanel kontrolki;
+	ArrayList<ShapeInfo2> ksztalciki = new ArrayList<ShapeInfo2>();
 	ArrayList<ShapeInfo> ksztalty = new ArrayList<ShapeInfo>();
 	ArrayList<ShapeInfo> ksztaltyWyp = new ArrayList<ShapeInfo>();
 	//public boolean wcisnietyPedzel = false;
@@ -111,6 +116,7 @@ public class Paint extends JFrame {
 	JButton brush;
 	JButton wielok;
 	private JPanel menu;
+	//Point2D mouse = new Point2D.Double(6000, 6000);
 	JButton nowy;
 	ImageIcon pedzel = new ImageIcon(getClass().getResource("pedzel.jpg"));
 	ImageIcon wielo = new ImageIcon(getClass().getResource("wielokat.jpg"));
@@ -242,6 +248,8 @@ public class Paint extends JFrame {
 
 				ksztalty.remove(ksztalty.get(ksztalty.size() - 1));
 				repaint();
+				/* g2d.draw(ksztalty.get(ksztalty.size()-3).ksztalt); */
+
 			}
 		});
 
@@ -274,6 +282,7 @@ public class Paint extends JFrame {
 				if (!ksztalty.isEmpty()) {
 					infoZapisz();
 				}
+
 			}
 		});
 
@@ -340,6 +349,8 @@ public class Paint extends JFrame {
 				wcisnietyKwadrat = false;
 				wcisnietyPrzycisk = "wylejFarbe";
 				punktyWielokat.clear();
+
+
 			}
 		});
 
@@ -360,6 +371,7 @@ public class Paint extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				wcisnietyPrzycisk = "elipsa";
 				wylewaj = false;
+
 			}
 		});
 		
@@ -370,7 +382,9 @@ public class Paint extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				wcisnietyPrzycisk = "kwadrat";
 				wylewaj = false;
+
 			}
+		
 	});
 		
 			okrag = new JButton("", obrazekOkrag);
@@ -380,6 +394,7 @@ public class Paint extends JFrame {
 				public void actionPerformed(ActionEvent event) {
 					wcisnietyPrzycisk = "okrag";
 					wylewaj = false;
+
 				}
 			
 		});
@@ -395,6 +410,7 @@ public class Paint extends JFrame {
 		roboczy = new JPanel() {
 		
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -638,6 +654,8 @@ public class Paint extends JFrame {
 					//shape.setFrame(punkt, rr);
 					shape.setFrame(punkt, rr);
 				}
+				
+				
 				if (wcisnietyPrzycisk == "okrag") {
 					punktyOkrag.add(me.getPoint());
 					double r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));
