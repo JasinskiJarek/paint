@@ -656,6 +656,8 @@ public class Paint extends JFrame {
 				}
 				
 				
+				
+				
 				if (wcisnietyPrzycisk == "okrag") {
 					punktyOkrag.add(me.getPoint());
 					double r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));

@@ -652,13 +652,15 @@ public class Paint extends JFrame {
 					Dimension2D rr = new Dimension((int)b,(int)b);
 					punkt = new Point2D.Double(punktyKwadrat.get(0).getX(), punktyKwadrat.get(0).getY());
 					//shape.setFrame(punkt, rr);
-					shape.setFrame(punkt, rr);
+					shape.setFrameFromDiagonal(punkt, me.getPoint());
 				}
+				
+				
 				
 				
 				if (wcisnietyPrzycisk == "okrag") {
 					punktyOkrag.add(me.getPoint());
-					double r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));
+					double r = -Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));
 					Ellipse2D shape = (Ellipse2D) currentShape;
 					Dimension2D rr = new Dimension((int)r,(int)r);
 					punkt = new Point2D.Double(punktyOkrag.get(0).getX(), punktyOkrag.get(0).getY());
