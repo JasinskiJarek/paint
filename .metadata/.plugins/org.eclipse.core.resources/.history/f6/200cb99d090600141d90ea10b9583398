@@ -1,0 +1,56 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
+
+public class Kolo extends Ellipse2D.Double{
+	public double r;
+	public double area;
+	public double circumference;
+
+
+	public Kolo(double x, double y, double promien)
+	{
+
+		super(x, y, 2*Math.abs(promien));
+		r = Math.abs(radius);
+		calcArea();
+		calcCircumference();
+	}
+	
+	public Kolo(double xleft, double ytop, double radius, Color fillCol, Color outlineCol)
+	{
+		// construct the subclass using the superclass constructor
+		// in effect, does x=xleft; y=ytop; width=radius; height=radius;
+		super(xleft, ytop, 2*Math.abs(radius), 2*Math.abs(radius));
+		r = Math.abs(radius);
+		fillColor = fillCol;
+		outlineColor = outlineCol;
+		calcArea();
+		calcCircumference();
+	}
+
+	/** Sets new values for this Circle.
+	 * @param xleft is the x coordinate of the far left side of the Circle.
+	 * @param ytop is the y coordinate of the top of the Circle.
+	 * @param radius is the radius of the Circle.
+	 * @param fillCol is the fill color of the Circle.
+	 * @param oulineCol is the ouline color of the Circle.
+	 */
+
+	
+	
+	public void calcArea()
+	{
+		area = Math.PI * r * r;
+	}
+
+	public void calcCircumference()
+	{
+		circumference = 2 * Math.PI * r;
+	}
+
+	
+	
+	
+}

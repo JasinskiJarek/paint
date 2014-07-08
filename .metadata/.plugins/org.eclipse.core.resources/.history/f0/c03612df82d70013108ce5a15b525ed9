@@ -1,0 +1,270 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class Paint extends JFrame {
+	ArrayList<JPanel> panele = new ArrayList<JPanel>();
+	private int grubosc = 2;
+	Point start = new Point();
+	Point end = new Point();
+	ArrayList<ShapeInfo> ksztalty = new ArrayList<ShapeInfo>();
+	public Shape currentShape;
+	public JPanel currentPanel;
+	public int currentGrubosc;
+	public Color currentColor = null;
+	ImageIcon obrazekLinia = new ImageIcon(getClass().getResource("line.jpg"));
+	ImageIcon obrazekOkrag = new ImageIcon(getClass().getResource("okrag.jpg"));
+	ImageIcon obrazekProstokat = new ImageIcon(getClass().getResource("prostokat.jpg"));
+	static JSlider slider;
+	static JButton wybierzKolor;
+	static JButton linia;
+	static JButton okrag;
+	static JButton prostokat;
+
+	static Color kolor;
+	private JPanel panelGlowny;
+	private JPanel panelRoboczy;
+	private JPanel menu;
+
+	int x = 0;
+	static String wcisnietyPrzycisk = "";
+
+    private static final long serialVersionUID = 1L;
+
+    public Paint() {
+        panelGlowny = new JPanel();
+        panelGlowny.setLayout(new BorderLayout(10, 10));
+        
+       
+        
+        
+
+        final JPanel menu = new JPanel();
+        menu.setPreferredSize(new Dimension(300, 40));
+        
+        
+        slider = new JSlider(SwingConstants.HORIZONTAL, 1,200,2);
+		slider.setMajorTickSpacing(10);
+		slider.setPaintTicks(true);
+		
+		
+		wybierzKolor = new JButton ("Kolor");
+		wybierzKolor.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				kolor = JColorChooser.showDialog(null, "Wybierz kolor", kolor);
+				if (kolor==null){
+					kolor=(Color.BLUE);
+					
+				}
+			
+			}});
+		
+		
+		linia = new JButton ("", obrazekLinia);
+		linia.setPreferredSize(new Dimension(30,30));
+		linia.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "linia";
+				
+			
+			}});
+		
+		okrag = new JButton ("", obrazekOkrag);
+		okrag.setPreferredSize(new Dimension(30,30));
+		okrag.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "okrag";
+				
+			
+			}});
+		prostokat = new JButton ("", obrazekProstokat);
+		prostokat.setPreferredSize(new Dimension(30,30));
+		prostokat.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "prostokat";
+				
+			
+			}});
+		menu.add(wybierzKolor);
+		menu.add(slider);
+		menu.add(linia);
+		menu.add(okrag);
+		menu.add(prostokat);
+		this.add(menu,BorderLayout.WEST);
+        
+        
+        
+        
+
+        JPanel obszarRoboczy = new JPanel();
+
+        slider.addChangeListener(new ChangeListener() {
+
+			public void stateChanged(ChangeEvent e) {
+
+				ustawGrubosc(slider.getValue());
+			}
+		});
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponents(g);
+		setBackground(Color.WHITE);
+		Graphics2D g2d = (Graphics2D)g.create();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setStroke(new BasicStroke(grubosc));
+
+		// kod do rysowania
+
+	
+{
+		for (ShapeInfo info : ksztalty) {
+			g2d.setStroke(new BasicStroke(info.grubosc));
+			 g2d.setColor( info.kolor );
+			g2d.draw(info.ksztalt);
+			
+		}
+		}
+		g2d.dispose();
+	}
+
+	public void ustawGrubosc(int nowaGrubosc) {
+		if (nowaGrubosc >= 0) {
+			grubosc = nowaGrubosc;
+		} else {
+			grubosc = 2;
+		}
+
+	
+
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	public void mouseClicked(MouseEvent arg0) {
+	}
+
+	public void mousePressed(MouseEvent me) {
+		
+		start = me.getPoint();
+		if (wcisnietyPrzycisk == "linia") {
+			currentColor = kolor;
+			currentGrubosc = slider.getValue();
+			currentShape = new Line2D.Double(me.getPoint(), me.getPoint());
+			ksztalty.add(new ShapeInfo(currentShape, currentColor, currentGrubosc, currentPanel));
+
+		}
+
+		if (wcisnietyPrzycisk == "okrag") {
+			currentColor = kolor;
+			currentGrubosc = slider.getValue();
+			currentShape = new Ellipse2D.Double();
+			ksztalty.add(new ShapeInfo(currentShape, currentColor, currentGrubosc,currentPanel));
+
+		}
+
+		if (wcisnietyPrzycisk == "prostokat") {
+			currentColor = kolor;
+			currentGrubosc = slider.getValue();
+			currentShape = new Rectangle2D.Double();
+			ksztalty.add(new ShapeInfo(currentShape, currentColor, currentGrubosc, currentPanel));
+
+		}
+
+		repaint();
+	}
+
+	public void mouseReleased(MouseEvent me) {
+
+	}
+
+	public void mouseDragged(MouseEvent me) {
+
+		if (wcisnietyPrzycisk == "linia") {
+
+			Line2D shape = (Line2D) currentShape;
+			shape.setLine(shape.getP1(), me.getPoint());
+
+		}
+
+		if (wcisnietyPrzycisk == "okrag") {
+
+			Ellipse2D shape = (Ellipse2D) currentShape;
+
+			shape.setFrameFromDiagonal(end, start);
+
+		}
+
+		if (wcisnietyPrzycisk == "prostokat") {
+
+			Rectangle2D shape = (Rectangle2D) currentShape;
+
+			shape.setFrameFromDiagonal(end, start);
+
+		}
+
+		end = me.getPoint();
+
+		repaint();
+	}
+
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	
+	
+        
+        
+        
+        
+        
+
+        JButton myButton = new JButton("Add Component ");
+        myButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                panelGlowny.remove(menu);
+                panelGlowny.add(panelRoboczy, BorderLayout.CENTER);
+                panelGlowny.revalidate();
+                panelGlowny.repaint();
+                pack();
+            }
+        });
+        setTitle("My Empty Frame");
+        setLocation(10, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panelGlowny.add(menu, BorderLayout.CENTER);
+        panelGlowny.add(myButton, BorderLayout.SOUTH);
+        add(panelGlowny);
+        pack();
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Paint paint = new Paint();
+            }
+        });
+    }
+}

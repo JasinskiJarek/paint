@@ -1,0 +1,123 @@
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+
+public class Paint extends JFrame {
+	
+	ImageIcon obrazekLinia = new ImageIcon(getClass().getResource("line.jpg"));
+	ImageIcon obrazekOkrag = new ImageIcon(getClass().getResource("okrag.jpg"));
+	ImageIcon obrazekProstokat = new ImageIcon(getClass().getResource("prostokat.jpg"));
+	static JSlider slider;
+	static JButton wybierzKolor;
+	static JButton linia;
+	static JButton okrag;
+	static JButton prostokat;
+
+	static Color kolor;
+	private JPanel panelGlowny;
+	private JPanel menu;
+	private JPanel roboczy;
+
+	int x = 0;
+	static String wcisnietyPrzycisk = "";
+
+    private static final long serialVersionUID = 1L;
+
+    public Paint() {
+        panelGlowny = new JPanel();
+        panelGlowny.setLayout(new BorderLayout(10, 10));
+        
+       
+        
+        
+
+        final JPanel menu = new JPanel();
+        menu.setPreferredSize(new Dimension(300, 40));
+        
+        
+        slider = new JSlider(SwingConstants.HORIZONTAL, 1,200,2);
+		slider.setMajorTickSpacing(10);
+		slider.setPaintTicks(true);
+		
+		
+		wybierzKolor = new JButton ("Kolor");
+		wybierzKolor.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				kolor = JColorChooser.showDialog(null, "Wybierz kolor", kolor);
+				if (kolor==null){
+					kolor=(Color.BLUE);
+					
+				}
+			
+			}});
+		
+		
+		linia = new JButton ("", obrazekLinia);
+		linia.setPreferredSize(new Dimension(30,30));
+		linia.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "linia";
+				
+			
+			}});
+		
+		okrag = new JButton ("", obrazekOkrag);
+		okrag.setPreferredSize(new Dimension(30,30));
+		okrag.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "okrag";
+				
+			
+			}});
+		prostokat = new JButton ("", obrazekProstokat);
+		prostokat.setPreferredSize(new Dimension(30,30));
+		prostokat.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				
+				wcisnietyPrzycisk = "prostokat";
+				
+			
+			}});
+		menu.add(wybierzKolor);
+		menu.add(slider);
+		menu.add(linia);
+		menu.add(okrag);
+		menu.add(prostokat);
+		this.add(menu,BorderLayout.WEST);
+        
+        
+        
+        
+
+        JPanel roboczy = new JPanel();
+
+
+        
+        
+        setTitle("My Empty Frame");
+        setLocation(10, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panelGlowny.add(menu, BorderLayout.NORTH);
+        panelGlowny.add(roboczy, BorderLayout.SOUTH);
+        add(panelGlowny);
+        pack();
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Paint paint = new Paint();
+            }
+        });
+    }
+}
