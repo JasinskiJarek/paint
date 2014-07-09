@@ -408,7 +408,8 @@ public class Paint extends JFrame {
 				g3d.setBackground(Color.WHITE);
 				g2d.drawImage(imagesy.get(0), null, 0, 0);
 				g3d.clearRect(0, 0, getSz(), getWy());
-				g2d.dispose();				
+				g2d.dispose();
+				// punkt 1
 				repaint();
 				for (ShapeInfo info : ksztalty) {
 					g3d.setStroke(new BasicStroke(info.grubosc));
@@ -821,6 +822,8 @@ public class Paint extends JFrame {
 					kolor, grubosc));
 		
 		}}
+		
+		// tutaj punkt 2
 		ksztalty.addAll(ksztaltyWyp);
 	}
 	

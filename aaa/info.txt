@@ -1,0 +1,2 @@
+1. Repaint w metodzie paintComponent jest konieczny. Ja bymprzenios³tego repaint wszedzie tam gdzie cossie dziej mousDrag click itd.
+2. Wolno dzia³a  wypelnianie poniewaz lista kszta³ow po kazdym wype³nieniu powieksza sie dwukrotnie o kszta³ty wype³nione
