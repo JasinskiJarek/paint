@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -47,6 +48,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import paint.PaintShape;
+
 public class Paint extends JFrame {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -58,6 +61,7 @@ public class Paint extends JFrame {
 			}
 		});
 	}
+
 	ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
 	Point2D punkt;
 	boolean zwolniony = false;
@@ -102,7 +106,7 @@ public class Paint extends JFrame {
 	private JPanel kontrolki;
 	ArrayList<ShapeInfo> ksztalty = new ArrayList<ShapeInfo>();
 	ArrayList<ShapeInfo> ksztaltyWyp = new ArrayList<ShapeInfo>();
-	//public boolean wcisnietyPedzel = false;
+	// public boolean wcisnietyPedzel = false;
 	public boolean wcisnietyProstokat = false;
 	public boolean wcisnietyLinia = false;
 	public boolean wcisnietyKolo = false;
@@ -117,9 +121,11 @@ public class Paint extends JFrame {
 	ImageIcon obrazekDalej = new ImageIcon(getClass().getResource("dalej.png"));
 	ImageIcon obrazekLinia = new ImageIcon(getClass().getResource("linia.jpg"));
 	ImageIcon obrazekNowy = new ImageIcon(getClass().getResource("nowy.jpg"));
-	ImageIcon obrazekElipsa = new ImageIcon(getClass().getResource("elipsa.jpg"));
+	ImageIcon obrazekElipsa = new ImageIcon(getClass()
+			.getResource("elipsa.jpg"));
 	ImageIcon obrazekOkrag = new ImageIcon(getClass().getResource("okrag.jpg"));
-	ImageIcon obrazekKwadrat = new ImageIcon(getClass().getResource("kwadrat.jpg"));
+	ImageIcon obrazekKwadrat = new ImageIcon(getClass().getResource(
+			"kwadrat.jpg"));
 	ImageIcon obrazekOtworz = new ImageIcon(getClass()
 			.getResource("otworz.jpg"));
 	ImageIcon obrazekProstokat = new ImageIcon(getClass().getResource(
@@ -163,10 +169,12 @@ public class Paint extends JFrame {
 	JButton zapisz;
 	JButton kwadrat;
 	JButton zatwierdzRozmiar;
+
 	public Paint() {
 		szerokosc = new JTextField("1024");
 		wysokosc = new JTextField("576");
-		bImage = new BufferedImage(getSz(), getWy(), BufferedImage.TYPE_INT_ARGB);
+		bImage = new BufferedImage(getSz(), getWy(),
+				BufferedImage.TYPE_INT_ARGB);
 		img = new BufferedImage(getSz(), getWy(), BufferedImage.TYPE_INT_ARGB);
 		belkamenu = new JMenuBar();
 		setJMenuBar(belkamenu);
@@ -294,8 +302,7 @@ public class Paint extends JFrame {
 				otworzObraz();
 			}
 		});
-		
-		
+
 		wielok = new JButton("", wielo);
 		wielok.setPreferredSize(new Dimension(40, 40));
 		wielok.addActionListener(new ActionListener() {
@@ -304,8 +311,7 @@ public class Paint extends JFrame {
 				wcisnietyPrzycisk = "wielokat";
 			}
 		});
-		
-		
+
 		brush = new JButton("", pedzel);
 		brush.setPreferredSize(new Dimension(40, 40));
 		brush.addActionListener(new ActionListener() {
@@ -362,7 +368,7 @@ public class Paint extends JFrame {
 				wylewaj = false;
 			}
 		});
-		
+
 		kwadrat = new JButton("", obrazekKwadrat);
 		kwadrat.setPreferredSize(new Dimension(40, 40));
 		kwadrat.addActionListener(new ActionListener() {
@@ -371,17 +377,17 @@ public class Paint extends JFrame {
 				wcisnietyPrzycisk = "kwadrat";
 				wylewaj = false;
 			}
-	});
-		
-			okrag = new JButton("", obrazekOkrag);
-			okrag.setPreferredSize(new Dimension(40, 40));
-			okrag.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					wcisnietyPrzycisk = "okrag";
-					wylewaj = false;
-				}
-			
+		});
+
+		okrag = new JButton("", obrazekOkrag);
+		okrag.setPreferredSize(new Dimension(40, 40));
+		okrag.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				wcisnietyPrzycisk = "okrag";
+				wylewaj = false;
+			}
+
 		});
 		prostokat = new JButton("", obrazekProstokat);
 		prostokat.setPreferredSize(new Dimension(40, 40));
@@ -393,14 +399,15 @@ public class Paint extends JFrame {
 			}
 		});
 		roboczy = new JPanel() {
-		
+
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				ArrayList<BufferedImage> imagesy = new ArrayList<BufferedImage>();
-				Graphics2D g3d = bImage.createGraphics();		
-				imagesy.add(bImage);	
+				Graphics2D g3d = bImage.createGraphics();
+				imagesy.add(bImage);
 				g3d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
 				g3d.setStroke(new BasicStroke(grubosc));
@@ -414,56 +421,53 @@ public class Paint extends JFrame {
 				for (ShapeInfo info : ksztalty) {
 					g3d.setStroke(new BasicStroke(info.grubosc));
 					g3d.setColor(info.kolor);
-				    Area obszar1 = new Area(info.ksztalt);
-					if ((boolean)info.filled != false){
-					g3d.setColor(info.kolor);
-					
-					if (wcisnietyPrzycisk == "linia"|| wcisnietyPrzycisk == "pedzel")
-					{
-						g3d.fill(info.ksztalt);
-						
-						//g3d.fill(obszar1);
-					}
-					
-					if (wcisnietyPrzycisk == "wielokat")
-					{
-						//g3d.fill(info.ksztalcik);
-						//g3d.fill(obszar1);
-					}
-					
-					else{
-					//g3d.fill(obszar1);
-					g3d.fill(info.ksztalt);
-					}
-					}
-					else{
-						if (wcisnietyPrzycisk == "linia"|| wcisnietyPrzycisk == "pedzel")
-						{
+					Area obszar1 = new Area(info.ksztalt);
+					if ((boolean) info.filled != false) {
+						g3d.setColor(info.kolor);
+
+						if (wcisnietyPrzycisk == "linia"
+								|| wcisnietyPrzycisk == "pedzel") {
+							g3d.fill(info.ksztalt);
+
+							// g3d.fill(obszar1);
+						}
+
+						if (wcisnietyPrzycisk == "wielokat") {
+							// g3d.fill(info.ksztalcik);
+							// g3d.fill(obszar1);
+						}
+
+						else {
+							// g3d.fill(obszar1);
+							g3d.fill(info.ksztalt);
+						}
+					} else {
+						if (wcisnietyPrzycisk == "linia"
+								|| wcisnietyPrzycisk == "pedzel") {
 							g3d.draw(info.ksztalt);
-							//g3d.draw(obszar1);
-							
+							// g3d.draw(obszar1);
+
 						}
-						
-						if (wcisnietyPrzycisk == "wielokat")
-						{
-							//g3d.draw(info.ksztalt);
+
+						if (wcisnietyPrzycisk == "wielokat") {
+							// g3d.draw(info.ksztalt);
 							g3d.draw(info.ksztalcik);
-							
+
 						}
-						
-						else{
-							
-					//g3d.draw(obszar1);
-					g3d.draw(info.ksztalt);
-					
+
+						else {
+
+							// g3d.draw(obszar1);
+							g3d.draw(info.ksztalt);
+
 						}
 					}
-						
+
 				}
-				
-						}
-			};
-			
+
+			}
+		};
+
 		roboczy.setLayout(new CardLayout());
 		roboczy.setBackground(Color.WHITE);
 		menu.add(nowy);
@@ -510,74 +514,76 @@ public class Paint extends JFrame {
 		roboczy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				
+
 				punkt = me.getPoint();
-				
+
 				if (wcisnietyPrzycisk == "wielokat") {
-		        	Graphics2D g3d = bImage.createGraphics();
-		        	g3d.setBackground(Color.WHITE);
-					punktyWielokat.add(me.getPoint());  
-					    System.out.println(punktyWielokat);
-					GeneralPath wielokat = new GeneralPath(GeneralPath.WIND_EVEN_ODD, punktyWielokat.size());
-					wielokat.moveTo(punktyWielokat.get(0).getX(), punktyWielokat.get(0).getY());
-					for (int k = 0; k < punktyWielokat.size(); k++){
-						wielokat.lineTo(punktyWielokat.get(k).getX(), punktyWielokat.get(k).getY());
-						}
-					if (me.getModifiers() == MouseEvent.BUTTON3_MASK) 
-					{
-					wielokat.closePath();
-					System.out.println("zamykanie");
-					punktyWielokat.clear();
+					Graphics2D g3d = bImage.createGraphics();
+					g3d.setBackground(Color.WHITE);
+					punktyWielokat.add(me.getPoint());
+					System.out.println(punktyWielokat);
+					GeneralPath wielokat = new GeneralPath(
+							GeneralPath.WIND_EVEN_ODD, punktyWielokat.size());
+					wielokat.moveTo(punktyWielokat.get(0).getX(),
+							punktyWielokat.get(0).getY());
+					for (int k = 0; k < punktyWielokat.size(); k++) {
+						wielokat.lineTo(punktyWielokat.get(k).getX(),
+								punktyWielokat.get(k).getY());
 					}
-			        Shape wielokatKsztalt = wielokat;
-			       ksztalty.add (new ShapeInfo(wielokatKsztalt,wielokatKsztalt, false, kolor, grubosc));
-			       
-			}				
+					if (me.getModifiers() == MouseEvent.BUTTON3_MASK) {
+						wielokat.closePath();
+						System.out.println("zamykanie");
+						punktyWielokat.clear();
+					}
+					Shape wielokatKsztalt = wielokat;
+					ksztalty.add(new ShapeInfo(wielokatKsztalt,
+							wielokatKsztalt, false, kolor, grubosc));
+
+				}
 			}
-			
-			
+
 			public void mouseReleased(MouseEvent me) {
 				punktyKsztaltdowolny.clear();
 				punktyOkrag.clear();
 				punktyKwadrat.clear();
 				punktyWielokat.clear();
 				ciagniety = false;
-				
-				//punktyWielokat.clear();
-				
+
+				// punktyWielokat.clear();
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent me) {
-				//mouse = me.getPoint();
+				// mouse = me.getPoint();
 				start = me.getPoint();
 				end = me.getPoint();
-				
+
 				if (wylewaj != false) {
 					ksztaltyNakladanie();
-						}
-				
+				}
 
 				if (wcisnietyPrzycisk == "linia") {
 
-					currentShape = new Line2D.Double(me.getPoint(), me.getPoint());
+					currentShape = new Line2D.Double(me.getPoint(), me
+							.getPoint());
 					ustawieniaKsztaltu();
 
-					}
-				
-				if (wcisnietyPrzycisk == "elipsa") {
-				currentShape = new Ellipse2D.Double();
-				
-					ustawieniaKsztaltu();
-					
 				}
-				
+
+				if (wcisnietyPrzycisk == "elipsa") {
+					currentShape = new Ellipse2D.Double();
+
+					ustawieniaKsztaltu();
+
+				}
+
 				if (wcisnietyPrzycisk == "okrag") {
 					currentShape = new Ellipse2D.Double();
-					
-						ustawieniaKsztaltu();
-						
-					}
+
+					ustawieniaKsztaltu();
+
+				}
 
 				if (wcisnietyPrzycisk == "prostokat") {
 
@@ -585,7 +591,7 @@ public class Paint extends JFrame {
 					ustawieniaKsztaltu();
 
 				}
-				
+
 				if (wcisnietyPrzycisk == "kwadrat") {
 
 					currentShape = new Rectangle2D.Double();
@@ -594,57 +600,64 @@ public class Paint extends JFrame {
 				}
 			}
 
-
 		});
 
 		roboczy.addMouseMotionListener(new MouseMotionAdapter() {
 
-			
 			@Override
 			public void mouseDragged(MouseEvent me) {
 				ciagniety = true;
 				zwolniony = false;
 				if (wcisnietyPrzycisk == "linia") {
 					Line2D shape = (Line2D) currentShape;
-					shape.setLine(shape.getP1(), me.getPoint());	
+					shape.setLine(shape.getP1(), me.getPoint());
 				}
-				
+
 				if (wcisnietyPrzycisk == "pedzel") {
 					punktyKsztaltdowolny.add(me.getPoint());
-					    System.out.println(punktyKsztaltdowolny);
-					GeneralPath dowolny = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-					for (int k = 1; k < punktyKsztaltdowolny.size(); k++){
-						dowolny.moveTo(punktyKsztaltdowolny.get(k-1).getX(), punktyKsztaltdowolny.get(k-1).getY());
-						dowolny.lineTo(punktyKsztaltdowolny.get(k).getX(), punktyKsztaltdowolny.get(k).getY());
-						}
+					System.out.println(punktyKsztaltdowolny);
+					GeneralPath dowolny = new GeneralPath(
+							GeneralPath.WIND_EVEN_ODD);
+					for (int k = 1; k < punktyKsztaltdowolny.size(); k++) {
+						dowolny.moveTo(punktyKsztaltdowolny.get(k - 1).getX(),
+								punktyKsztaltdowolny.get(k - 1).getY());
+						dowolny.lineTo(punktyKsztaltdowolny.get(k).getX(),
+								punktyKsztaltdowolny.get(k).getY());
+					}
 					Area pedzelArea = new Area(dowolny);
-			        Shape pedzelKsztalt = dowolny;
-			        ksztalty.add (new ShapeInfo(pedzelKsztalt, pedzelKsztalt, false, kolor, grubosc));
+					Shape pedzelKsztalt = dowolny;
+					ksztalty.add(new ShapeInfo(pedzelKsztalt, pedzelKsztalt,
+							false, kolor, grubosc));
 				}
-			        
-			        
+
 				if (wcisnietyPrzycisk == "elipsa") {
 					Ellipse2D shape = (Ellipse2D) currentShape;
-					shape.setFrameFromDiagonal(end, start);		
+					shape.setFrameFromDiagonal(end, start);
 				}
-				
-				
-				
+
 				if (wcisnietyPrzycisk == "kwadrat") {
 					punktyKwadrat.add(me.getPoint());
-					double b = Math.sqrt((Math.abs(me.getX()-punktyKwadrat.get(0).getX())*Math.abs(me.getX()-punktyKwadrat.get(0).getX()) + Math.abs(me.getY()-punktyKwadrat.get(0).getY())));
+					double b = Math.sqrt((Math.abs(me.getX()
+							- punktyKwadrat.get(0).getX())
+							* Math.abs(me.getX() - punktyKwadrat.get(0).getX()) + Math
+							.abs(me.getY() - punktyKwadrat.get(0).getY())));
 					Rectangle2D shape = (Rectangle2D) currentShape;
-					Dimension2D rr = new Dimension((int)b,(int)b);
-					punkt = new Point2D.Double(punktyKwadrat.get(0).getX(), punktyKwadrat.get(0).getY());
-					//shape.setFrame(punkt, rr);
+					Dimension2D rr = new Dimension((int) b, (int) b);
+					punkt = new Point2D.Double(punktyKwadrat.get(0).getX(),
+							punktyKwadrat.get(0).getY());
+					// shape.setFrame(punkt, rr);
 					shape.setFrame(punkt, rr);
 				}
 				if (wcisnietyPrzycisk == "okrag") {
 					punktyOkrag.add(me.getPoint());
-					double r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));
+					double r = Math.sqrt((Math.abs(me.getX()
+							- punktyOkrag.get(0).getX())
+							* Math.abs(me.getX() - punktyOkrag.get(0).getX()) + Math
+							.abs(me.getY() - punktyOkrag.get(0).getY())));
 					Ellipse2D shape = (Ellipse2D) currentShape;
-					Dimension2D rr = new Dimension((int)r,(int)r);
-					punkt = new Point2D.Double(punktyOkrag.get(0).getX(), punktyOkrag.get(0).getY());
+					Dimension2D rr = new Dimension((int) r, (int) r);
+					punkt = new Point2D.Double(punktyOkrag.get(0).getX(),
+							punktyOkrag.get(0).getY());
 					shape.setFrame(punkt, rr);
 				}
 
@@ -653,7 +666,7 @@ public class Paint extends JFrame {
 					shape.setFrameFromDiagonal(end, start);
 				}
 				end = me.getPoint();
-			}	
+			}
 		});
 		this.add(scroller, BorderLayout.CENTER);
 
@@ -666,7 +679,6 @@ public class Paint extends JFrame {
 
 		return false;
 	}
-
 
 	public Color getColor() {
 		return kolor;
@@ -763,8 +775,8 @@ public class Paint extends JFrame {
 		this.fill = fill;
 
 	}
-	
-	public void ustawieniaKsztaltu(){
+
+	public void ustawieniaKsztaltu() {
 		shapeColor = kolor;
 		currentColor = kolor;
 		currentGrubosc = slider.getValue();
@@ -772,61 +784,51 @@ public class Paint extends JFrame {
 		filled = true;
 		obszar = new Area(currentShape);
 
-		ksztalty.add(new ShapeInfo(obszar,currentShape, currentShape, false,
+		ksztalty.add(new ShapeInfo(obszar, currentShape, currentShape, false,
 				currentColor, currentGrubosc));
-		
-		
+
 	}
-	
-	public void ksztaltyNakladanie(){
-//		ArrayList<ShapeInfo> klon = (ArrayList<ShapeInfo>)ksztalty.clone();
+
+	public void ksztaltyNakladanie() {
+		List<Shape> clickedInsideShapes = new ArrayList<Shape>();
 
 		for (ShapeInfo info : ksztalty) {
-		
-			if ((boolean) wylewaj != false)
-		if (info.ksztalt.contains(start))	
-		{
-			//Area a1 = new Area(info3.ksztalt);
-			ksztaltyWyp.add(new ShapeInfo(new Area(info.ksztalt), info.ksztalt, true,
-					kolor, grubosc));
-		System.out.println("dodanedsadsa");
-
-		if (ksztaltyWyp.size() > 1) {
-			areaToFill = new Area(ksztaltyWyp.get(0).ksztalt);
-			for (ShapeInfo szejpy : ksztaltyWyp) {
-				if (areaToFill.equals(szejpy.ksztalt))
-					continue;	
-				areaToFill.intersect(new Area(szejpy.ksztalt)); 
-				System.out.println("intersekcja");
+			if (info.ksztalt.contains(start)) {
+				clickedInsideShapes.add(info.ksztalt);
 			}
-		} else if (ksztaltyWyp.size() == 1) {
-			areaToFill = new Area(ksztaltyWyp.get(0).ksztalt);
+		}
+		Area areaToFill = null;
+		// czesc wspolna
+		if (clickedInsideShapes.size() > 1) {
+			areaToFill = new Area(clickedInsideShapes.get(0));
+			for (Shape shape : clickedInsideShapes) {
+				if (areaToFill.equals(shape))
+					continue;
+
+				areaToFill.intersect(new Area(shape));
+			}
+		} else if (clickedInsideShapes.size() == 1) {
+			areaToFill = new Area(clickedInsideShapes.get(0));
 		}
 		// roznica
-		for (ShapeInfo shapeIntersect : ksztaltyWyp) {
-			for (ShapeInfo info2 : ksztalty) {
-				//if (shape.getShape().equals(shapeIntersect))
-				if (ksztaltyWyp.contains(info2.ksztalt))
-					continue;	
-				//System.out.println(((Ellipse2D)info2.ksztalt).getX() + ":" + ((Ellipse2D)info2.ksztalt).getY());
-				a3 = new Area(info2.ksztalt);
-				a2 = new Area(shapeIntersect.ksztalt);
-				if(doAreasCollide(a3, a2))
-					areaToFill.subtract(a3);
-				System.out.println("koliduja");
-			}
+		for (Shape shapeIntersect : clickedInsideShapes) {
+			for (ShapeInfo info : ksztalty) {
+				// if (shape.getShape().equals(shapeIntersect))
+				if (clickedInsideShapes.contains(info.ksztalt))
+					continue;
+
+				Area a1 = new Area(info.ksztalt);
+				Area a2 = new Area(shapeIntersect);
+				if (doAreasCollide(a1, a2))
+					areaToFill.subtract(a1);
+			}	
 		}
-		
-		if (areaToFill != null)
-			ksztaltyWyp.add(new ShapeInfo(areaToFill, info.ksztalt, true,
-					kolor, grubosc));
-		
-		}}
-		
-		// tutaj punkt 2
-		ksztalty.addAll(ksztaltyWyp);
+
+		if (areaToFill != null) {
+			
+			ksztalty.add(areaToFill);
+		}
 	}
-	
 
 	public void ustawGrubosc(int nowaGrubosc) {
 		if (nowaGrubosc >= 0) {
@@ -835,51 +837,43 @@ public class Paint extends JFrame {
 			grubosc = 2;
 		}
 	}
-	
 
-	
-	
 	public boolean doAreasCollide(Area area1, Area area2) {
-        boolean collide = false;
+		boolean collide = false;
 
-        Area collide1 = new Area(area1);
-        collide1.subtract(area2);
-        if (!collide1.equals(area1)) {
-            collide = true;
-        }
+		Area collide1 = new Area(area1);
+		collide1.subtract(area2);
+		if (!collide1.equals(area1)) {
+			collide = true;
+		}
 
-        Area collide2 = new Area(area2);
-        collide2.subtract(area1);
-        if (!collide2.equals(area2)) {
-            collide = true;
-        }
+		Area collide2 = new Area(area2);
+		collide2.subtract(area1);
+		if (!collide2.equals(area2)) {
+			collide = true;
+		}
 
-        return collide;
-    }
-	
-	
+		return collide;
+	}
+
 	public void PencilTool() {
-        path = new GeneralPath();
-        setShape(path);
-        
-    }
-	
-	public void action(int eventID, double x, double y,
-	         Graphics2D g) {
-	     if (eventID == MouseEvent.MOUSE_PRESSED)
-	         path.moveTo(x, y);
-	     else if (eventID == MouseEvent.MOUSE_DRAGGED) {
-	         Point2D startPoint = path.getCurrentPoint();
-	         Point2D endPoint = new Point2D.Double(x, y);
-	         Line2D l = new Line2D.Float(startPoint, endPoint);
+		path = new GeneralPath();
+		setShape(path);
 
-	         g.draw(l);
-	         path.lineTo(x, y);
-	     }}
-	
-	
-	
+	}
 
+	public void action(int eventID, double x, double y, Graphics2D g) {
+		if (eventID == MouseEvent.MOUSE_PRESSED)
+			path.moveTo(x, y);
+		else if (eventID == MouseEvent.MOUSE_DRAGGED) {
+			Point2D startPoint = path.getCurrentPoint();
+			Point2D endPoint = new Point2D.Double(x, y);
+			Line2D l = new Line2D.Float(startPoint, endPoint);
+
+			g.draw(l);
+			path.lineTo(x, y);
+		}
+	}
 
 	private void zapiszObraz() {
 		if (fc == null) {
