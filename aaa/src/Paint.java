@@ -58,8 +58,11 @@ public class Paint extends JFrame {
 			}
 		});
 	}
+	double r;
 	ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
 	Point2D punkt;
+	Point2D punkt1;
+	Point2D punkt2;
 	boolean zwolniony = false;
 	boolean ciagniety = false;
 	ArrayList<Point> punktyKsztaltdowolny = new ArrayList<Point>();
@@ -539,7 +542,6 @@ public class Paint extends JFrame {
 				punktyKsztaltdowolny.clear();
 				punktyOkrag.clear();
 				punktyKwadrat.clear();
-				punktyWielokat.clear();
 				ciagniety = false;
 				
 				//punktyWielokat.clear();
@@ -558,7 +560,7 @@ public class Paint extends JFrame {
 				
 
 				if (wcisnietyPrzycisk == "linia") {
-
+					//punktyWielokat.clear();
 					currentShape = new Line2D.Double(me.getPoint(), me.getPoint());
 					ustawieniaKsztaltu();
 
@@ -572,9 +574,10 @@ public class Paint extends JFrame {
 				}
 				
 				if (wcisnietyPrzycisk == "okrag") {
-					currentShape = new Ellipse2D.Double();
 					
-						ustawieniaKsztaltu();
+					currentShape = new Ellipse2D.Double();
+					ustawieniaKsztaltu();
+						
 						
 					}
 
@@ -601,6 +604,7 @@ public class Paint extends JFrame {
 			
 			@Override
 			public void mouseDragged(MouseEvent me) {
+				punkt1 = me.getPoint();
 				ciagniety = true;
 				zwolniony = false;
 				if (wcisnietyPrzycisk == "linia") {
@@ -628,23 +632,59 @@ public class Paint extends JFrame {
 				}
 				
 				
-				
+				//me.getX()-b, me.getY()-b
 				if (wcisnietyPrzycisk == "kwadrat") {
 					punktyKwadrat.add(me.getPoint());
-					double b = Math.sqrt((Math.abs(me.getX()-punktyKwadrat.get(0).getX())*Math.abs(me.getX()-punktyKwadrat.get(0).getX()) + Math.abs(me.getY()-punktyKwadrat.get(0).getY())));
+					double b = Math.sqrt((Math.abs(me.getX()-punktyKwadrat.get(0).getX())*Math.abs(me.getX()-punktyKwadrat.get(0).getX()) + Math.abs(me.getY()-punktyKwadrat.get(0).getY())*Math.abs(me.getY()-punktyKwadrat.get(0).getY())));
 					Rectangle2D shape = (Rectangle2D) currentShape;
-					Dimension2D rr = new Dimension((int)b,(int)b);
 					punkt = new Point2D.Double(punktyKwadrat.get(0).getX(), punktyKwadrat.get(0).getY());
-					//shape.setFrame(punkt, rr);
-					shape.setFrame(punkt, rr);
+					if (me.getY()<punktyKwadrat.get(0).getY()&&me.getX()>punktyKwadrat.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyKwadrat.get(0).getX()+(int)b, (int)punktyKwadrat.get(0).getY()-(int)b);
+					}
+					else if (me.getY()<punktyKwadrat.get(0).getY()&&me.getX()<punktyKwadrat.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyKwadrat.get(0).getX()-(int)b, (int)punktyKwadrat.get(0).getY()-(int)b);
+					}
+					else if (me.getY()>punktyKwadrat.get(0).getY()&&me.getX()>punktyKwadrat.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyKwadrat.get(0).getX()+(int)b, (int)punktyKwadrat.get(0).getY()+(int)b);
+					}
+					else if (me.getY()>punktyKwadrat.get(0).getY()&&me.getX()<punktyKwadrat.get(0).getX())
+					{
+						punkt1=new Point ((int)punktyKwadrat.get(0).getX()-(int)b, (int)punktyKwadrat.get(0).getY()+(int)b);
+					
+					}
+					shape.setFrameFromDiagonal(punkt, punkt1);
 				}
 				if (wcisnietyPrzycisk == "okrag") {
 					punktyOkrag.add(me.getPoint());
-					double r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())));
+					r = Math.sqrt((Math.abs(me.getX()-punktyOkrag.get(0).getX())*Math.abs(me.getX()-punktyOkrag.get(0).getX()) + Math.abs(me.getY()-punktyOkrag.get(0).getY())*Math.abs(me.getY()-punktyOkrag.get(0).getY())));
 					Ellipse2D shape = (Ellipse2D) currentShape;
-					Dimension2D rr = new Dimension((int)r,(int)r);
 					punkt = new Point2D.Double(punktyOkrag.get(0).getX(), punktyOkrag.get(0).getY());
-					shape.setFrame(punkt, rr);
+					if (me.getY()<punktyOkrag.get(0).getY()&&me.getX()>punktyOkrag.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyOkrag.get(0).getX()+(int)r, (int)punktyOkrag.get(0).getY()-(int)r);
+					}
+					else if (me.getY()<punktyOkrag.get(0).getY()&&me.getX()<punktyOkrag.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyOkrag.get(0).getX()-(int)r, (int)punktyOkrag.get(0).getY()-(int)r);
+					}
+					else if (me.getY()>punktyOkrag.get(0).getY()&&me.getX()>punktyOkrag.get(0).getX())
+					{
+					punkt1=new Point ((int)punktyOkrag.get(0).getX()+(int)r, (int)punktyOkrag.get(0).getY()+(int)r);
+					}
+					else if (me.getY()>punktyOkrag.get(0).getY()&&me.getX()<punktyOkrag.get(0).getX())
+					{
+						punkt1=new Point ((int)punktyOkrag.get(0).getX()-(int)r, (int)punktyOkrag.get(0).getY()+(int)r);
+					
+					}
+					shape.setFrameFromDiagonal(punkt, punkt1);
+					
+					 
+
+					
+					
 				}
 
 				if (wcisnietyPrzycisk == "prostokat") {
