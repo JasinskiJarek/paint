@@ -48,7 +48,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import paint.PaintShape;
+
 
 public class Paint extends JFrame {
 	public static void main(String[] args) {
@@ -824,10 +824,8 @@ public class Paint extends JFrame {
 			}	
 		}
 
-		if (areaToFill != null) {
-			
-			ksztalty.add(areaToFill);
-		}
+		if (areaToFill != null) 
+			ksztalty.add(new ShapeInfo(areaToFill, areaToFill, true, kolor, grubosc));
 	}
 
 	public void ustawGrubosc(int nowaGrubosc) {
